@@ -3,12 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
 #include "CBT_SwordPickUpActor.generated.h"
 
-class UStaticMeshComponent;
 
-UCLASS()
+
+UCLASS(Placeable, Blueprintable)
 class ADVANCED_PROGRAMMING_API ACBT_SwordPickUpActor : public AActor
 {
 	GENERATED_BODY()
@@ -16,8 +17,22 @@ class ADVANCED_PROGRAMMING_API ACBT_SwordPickUpActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ACBT_SwordPickUpActor();
+	
 
 protected:
+	//making the event begin play function
+	virtual void BeginPlay() override;
+	
 	UPROPERTY(EditDefaultsOnly, Category="Sword Pick Up")
-	TIsTObjectPtr<UStaticMeshComponent> MeshComponent;
+	UStaticMeshComponent* MeshComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category="Sword Pick Up")
+	USphereComponent* SphereComponent;
+
+private:
+	UFUNCTION()
+	void SwordEquip();
+	
+	
+	
 };
