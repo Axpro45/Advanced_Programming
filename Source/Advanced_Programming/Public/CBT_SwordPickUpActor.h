@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "CBT_SwordPickUpActor.generated.h"
 
+
 class UStaticMeshComponent;
 class USphereComponent;
 
@@ -36,7 +37,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Sword Pick Up")
 	USphereComponent* SphereComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Sword Pick Up")
+	UPROPERTY(EditDefaultsOnly, Category="Sword Pick Up")
 	TObjectPtr<USphereComponent> ColliderComponent;
 
 	

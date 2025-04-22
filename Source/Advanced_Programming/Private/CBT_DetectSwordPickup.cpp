@@ -15,7 +15,7 @@ ACBT_DetectSwordPickup::ACBT_DetectSwordPickup()
 void ACBT_DetectSwordPickup::BeginPlay()
 {
 	Super::BeginPlay();
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("SwordPickedup"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("SwordPickedup"));
 }
 
 // Called every frame

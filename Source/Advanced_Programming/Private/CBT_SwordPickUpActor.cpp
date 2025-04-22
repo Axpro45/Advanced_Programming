@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 
+
 // Sets default values
 ACBT_SwordPickUpActor::ACBT_SwordPickUpActor()
 {
@@ -41,14 +42,21 @@ void ACBT_SwordPickUpActor::OnBeginOverlapComponentEvent(
     UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
     int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult
 )
-{ }
+{
+	if (!Cast<ACharacter>(OtherActor)) return;
+	Destroy();
+}
+
+
+
 
 void ACBT_SwordPickUpActor::SwordEquip()
 {
 	//GEngine is the class and the AddOnScreenDebugMessage is Print screen
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,TEXT("Picked up"));
 	//on the sword it destroys
-	this->Destroy();
+	//this->Destroy();
+	
 }
 
 void ACBT_SwordPickUpActor::BeginPlay()
@@ -57,6 +65,7 @@ void ACBT_SwordPickUpActor::BeginPlay()
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Test C++ begin play"));
 	SwordEquip();
 }
+
 
 
 
