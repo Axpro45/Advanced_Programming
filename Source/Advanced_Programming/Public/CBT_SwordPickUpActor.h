@@ -45,7 +45,8 @@ protected:
 private:
 	UFUNCTION()
 	void SwordEquip();
-	
+
+	bool SwordEquiped{ false };
 	
 	
 };

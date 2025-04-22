@@ -3,10 +3,9 @@
 
 #include "CBT_SwordPickUpActor.h"
 #include "Components/MeshComponent.h"
-#include "Collision.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Character.h"
-#include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
 
 
 // Sets default values
@@ -24,6 +23,7 @@ ACBT_SwordPickUpActor::ACBT_SwordPickUpActor()
     ColliderComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
     ColliderComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
     ColliderComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	
 
     ColliderComponent->OnComponentBeginOverlap.AddDynamic(
         this, &ACBT_SwordPickUpActor::OnBeginOverlapComponentEvent
@@ -43,20 +43,35 @@ void ACBT_SwordPickUpActor::OnBeginOverlapComponentEvent(
     int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult
 )
 {
-	if (!Cast<ACharacter>(OtherActor)) return;
-	Destroy();
+	if (!OtherActor->Tags.Contains("Player")) return;
+
+	if (SwordEquiped)return;
+	if (const ACharacter* Character = Cast<ACharacter>(OtherActor))
+	{
+		AttachToComponent(
+			Character->GetMesh(),
+			FAttachmentTransformRules(
+				EAttachmentRule::SnapToTarget,
+				EAttachmentRule::SnapToTarget,
+				EAttachmentRule::KeepWorld,
+				false
+			),
+			FName("hand_l")
+		);
+
+		
+		SwordEquiped = true;
+		// Destroy();
+	}
+	
+	
 }
-
-
 
 
 void ACBT_SwordPickUpActor::SwordEquip()
 {
 	//GEngine is the class and the AddOnScreenDebugMessage is Print screen
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,TEXT("Picked up"));
-	//on the sword it destroys
-	//this->Destroy();
-	
 }
 
 void ACBT_SwordPickUpActor::BeginPlay()
