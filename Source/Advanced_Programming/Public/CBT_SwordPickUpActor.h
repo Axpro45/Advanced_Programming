@@ -7,6 +7,8 @@
 #include "GameFramework/Actor.h"
 #include "CBT_SwordPickUpActor.generated.h"
 
+class UStaticMeshComponent;
+class USphereComponent;
 
 
 UCLASS(Placeable, Blueprintable)
@@ -18,6 +20,11 @@ public:
 	// Sets default values for this actor's properties
 	ACBT_SwordPickUpActor();
 	
+	UFUNCTION()
+	void OnBeginOverlapComponentEvent(
+		UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult
+	);
 
 protected:
 	//making the event begin play function
@@ -28,6 +35,11 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="Sword Pick Up")
 	USphereComponent* SphereComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sword Pick Up")
+	TObjectPtr<USphereComponent> ColliderComponent;
+
+	
 
 private:
 	UFUNCTION()

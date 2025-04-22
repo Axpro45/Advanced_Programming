@@ -3,6 +3,10 @@
 
 #include "CBT_SwordPickUpActor.h"
 #include "Components/MeshComponent.h"
+#include "Collision.h"
+#include "Components/SphereComponent.h"
+#include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ACBT_SwordPickUpActor::ACBT_SwordPickUpActor()
@@ -12,17 +16,37 @@ ACBT_SwordPickUpActor::ACBT_SwordPickUpActor()
 	
 
 
-	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("MeshComponent");
-	SetRootComponent(MeshComponent);
-	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	MeshComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
-	MeshComponent->SetGenerateOverlapEvents(false);
+    //Setting Up collider
+    ColliderComponent = CreateDefaultSubobject<USphereComponent>("ColliderComponent");
+    SetRootComponent(ColliderComponent);
+    ColliderComponent->SetGenerateOverlapEvents(true);
+    ColliderComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    ColliderComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
+    ColliderComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+
+    ColliderComponent->OnComponentBeginOverlap.AddDynamic(
+        this, &ACBT_SwordPickUpActor::OnBeginOverlapComponentEvent
+    );
+    //Setting Static Mesh
+    MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("MeshComponent");
+    MeshComponent->SetupAttachment(ColliderComponent);
+    MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    MeshComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
+    MeshComponent->SetGenerateOverlapEvents(false);
+
+
 
 }
+void ACBT_SwordPickUpActor::OnBeginOverlapComponentEvent(
+    UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult
+)
+{ }
+
 void ACBT_SwordPickUpActor::SwordEquip()
 {
 	//GEngine is the class and the AddOnScreenDebugMessage is Print screen
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red,TEXT("Picked up"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,TEXT("Picked up"));
 	//on the sword it destroys
 	this->Destroy();
 }
@@ -30,7 +54,7 @@ void ACBT_SwordPickUpActor::SwordEquip()
 void ACBT_SwordPickUpActor::BeginPlay()
 {
 	Super::BeginPlay();
-
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Test C++ begin play"));
 	SwordEquip();
 }
 
